@@ -1,24 +1,38 @@
 import { useState } from "react";
 import { setAccessToken } from "@/auth-state";
 import { Button } from "@/components/ui/button";
-import { setConfiguredServerUrl } from "@/utils/server-config";
+import { getConfiguredServerUrl, setConfiguredServerUrl } from "@/utils/server-config";
 
 const PERMANENT_TOKEN_EXPIRY = new Date("2099-12-31T23:59:59.000Z");
 
 const NativeServerSetup = () => {
-  const [serverUrl, setServerUrl] = useState("");
+  const [serverUrl, setServerUrl] = useState(() => getConfiguredServerUrl() ?? "");
   const [token, setToken] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = () => {
     const normalizedUrl = serverUrl.trim().replace(/\/+$/, "");
     const normalizedToken = token.trim();
 
     if (!normalizedUrl || !normalizedToken) {
+      setErrorMessage("Please enter both the server URL and access token.");
+      return;
+    }
+
+    try {
+      const parsedUrl = new URL(normalizedUrl);
+      if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+        setErrorMessage("The server URL must start with http:// or https://.");
+        return;
+      }
+    } catch {
+      setErrorMessage("The server URL is not valid.");
       return;
     }
 
     setConfiguredServerUrl(normalizedUrl);
     setAccessToken(normalizedToken, PERMANENT_TOKEN_EXPIRY, { persistent: true, refreshable: false });
+    setErrorMessage("");
     window.location.reload();
   };
 
@@ -29,6 +43,9 @@ const NativeServerSetup = () => {
         <h1 className="mt-3 text-2xl font-semibold tracking-tight">Connect to your Memos server</h1>
         <p className="mt-2 text-sm leading-6 text-[#7c6859]">
           Enter the server address and a personal access token to use this app on Android.
+        </p>
+        <p className="mt-2 text-xs leading-5 text-[#8b7767]">
+          `http://` and `https://` are both supported. Self-signed HTTPS certificates may still be rejected by Android.
         </p>
 
         <div className="mt-6 space-y-4">
@@ -59,6 +76,8 @@ const NativeServerSetup = () => {
             />
           </label>
         </div>
+
+        {errorMessage ? <p className="mt-4 text-sm text-[#b44f42]">{errorMessage}</p> : null}
 
         <Button className="mt-6 h-11 w-full rounded-full bg-[#8d6d58] text-white hover:bg-[#7c5e4b]" onClick={handleSubmit}>
           Save and Continue

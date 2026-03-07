@@ -1,3 +1,4 @@
+import { getAccessToken } from "@/auth-state";
 import { isNativeApp } from "./native-app";
 
 const SERVER_URL_KEY = "memos-native-server-url";
@@ -45,4 +46,10 @@ export const getApiBaseUrl = (): string => {
   return window.location.origin;
 };
 
-export const needsNativeServerSetup = (): boolean => isNativeApp() && !getConfiguredServerUrl();
+export const needsNativeServerSetup = (): boolean => {
+  if (!isNativeApp()) {
+    return false;
+  }
+
+  return !getConfiguredServerUrl() || !getAccessToken();
+};
