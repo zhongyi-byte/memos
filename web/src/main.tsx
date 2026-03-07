@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import { Toaster } from "react-hot-toast";
 import { RouterProvider } from "react-router-dom";
+import NativeServerSetup from "@/components/NativeServerSetup";
 import "./i18n";
 import "./index.css";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -17,6 +18,7 @@ import { queryClient } from "@/lib/query-client";
 import router from "./router";
 import { applyFlomoLikeEarly } from "./utils/flomo-like";
 import { applyLocaleEarly } from "./utils/i18n";
+import { needsNativeServerSetup } from "./utils/server-config";
 import { applyThemeEarly } from "./utils/theme";
 import "leaflet/dist/leaflet.css";
 import "katex/dist/katex.min.css";
@@ -56,6 +58,10 @@ function AppInitializer({ children }: { children: React.ReactNode }) {
 }
 
 function Main() {
+  if (needsNativeServerSetup()) {
+    return <NativeServerSetup />;
+  }
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

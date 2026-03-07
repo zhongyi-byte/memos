@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getAccessToken, isTokenExpired } from "@/auth-state";
+import { canRefreshToken, getAccessToken, isTokenExpired } from "@/auth-state";
 
 /**
  * Hook that proactively refreshes the access token when the tab becomes visible
@@ -23,6 +23,10 @@ export function useTokenRefreshOnFocus(refreshFn: () => Promise<void>, enabled: 
       // Only refresh if we have a token
       const token = getAccessToken();
       if (!token) {
+        return;
+      }
+
+      if (!canRefreshToken()) {
         return;
       }
 

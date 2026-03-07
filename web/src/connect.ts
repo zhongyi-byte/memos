@@ -1,7 +1,7 @@
 import { timestampDate } from "@bufbuild/protobuf/wkt";
 import { Code, ConnectError, createClient, type Interceptor } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
-import { getAccessToken, setAccessToken } from "./auth-state";
+import { canRefreshToken, getAccessToken, setAccessToken } from "./auth-state";
 import { ActivityService } from "./types/proto/api/v1/activity_service_pb";
 import { AttachmentService } from "./types/proto/api/v1/attachment_service_pb";
 import { AuthService } from "./types/proto/api/v1/auth_service_pb";
@@ -10,6 +10,7 @@ import { InstanceService } from "./types/proto/api/v1/instance_service_pb";
 import { MemoService } from "./types/proto/api/v1/memo_service_pb";
 import { ShortcutService } from "./types/proto/api/v1/shortcut_service_pb";
 import { UserService } from "./types/proto/api/v1/user_service_pb";
+import { getApiBaseUrl } from "./utils/server-config";
 import { redirectOnAuthFailure } from "./utils/auth-redirect";
 
 // ============================================================================
@@ -59,7 +60,7 @@ const fetchWithCredentials: typeof globalThis.fetch = (input, init) => {
 
 // Separate transport without auth interceptor to prevent recursion
 const refreshTransport = createConnectTransport({
-  baseUrl: window.location.origin,
+  baseUrl: getApiBaseUrl(),
   useBinaryFormat: true,
   fetch: fetchWithCredentials,
   interceptors: [],
@@ -111,6 +112,10 @@ const authInterceptor: Interceptor = (next) => async (req) => {
       throw error;
     }
 
+    if (!canRefreshToken()) {
+      throw error;
+    }
+
     try {
       await refreshAccessToken();
 
@@ -134,7 +139,7 @@ const authInterceptor: Interceptor = (next) => async (req) => {
 // ============================================================================
 
 const transport = createConnectTransport({
-  baseUrl: window.location.origin,
+  baseUrl: getApiBaseUrl(),
   useBinaryFormat: true,
   fetch: fetchWithCredentials,
   interceptors: [authInterceptor],
