@@ -68,19 +68,26 @@ const MainLayout = () => {
   const { statistics, tags } = useFilteredMemoStats({ userName: statsUserName });
 
   return (
-    <section className="@container w-full min-h-full flex flex-col justify-start items-center">
+    <section className="@container relative w-full min-h-full flex flex-col justify-start items-center">
       {!md && (
         <MobileHeader>
           <MemoExplorerDrawer context={context} statisticsData={statistics} tagCount={tags} />
         </MobileHeader>
       )}
       {md && (
-        <div className={cn("fixed top-0 left-16 shrink-0 h-svh transition-all", "border-r border-border", lg ? "w-72" : "w-56")}>
-          <MemoExplorer className={cn("px-3 py-6")} context={context} statisticsData={statistics} tagCount={tags} />
+        <div className={cn("fixed top-0 left-16 h-svh shrink-0 px-4 py-5 transition-all", lg ? "w-80" : "w-64")}>
+          <MemoExplorer
+            className={cn(
+              "rounded-[28px] border border-[rgba(150,124,102,0.14)] bg-[rgba(252,247,240,0.8)] px-3 py-5 shadow-[0_20px_50px_rgba(120,98,76,0.08)] backdrop-blur",
+            )}
+            context={context}
+            statisticsData={statistics}
+            tagCount={tags}
+          />
         </div>
       )}
-      <div className={cn("w-full min-h-full", lg ? "pl-72" : md ? "pl-56" : "")}>
-        <div className={cn("w-full mx-auto px-4 sm:px-6 md:pt-6 pb-8")}>
+      <div className={cn("w-full min-h-full", lg ? "pl-80" : md ? "pl-64" : "")}>
+        <div className={cn("mx-auto w-full max-w-5xl px-4 pb-10 sm:px-6 md:pt-6")}>
           <Outlet />
         </div>
       </div>

@@ -7,11 +7,99 @@
 }
 
 @layer base {
+  :root[data-flomo-like="true"] {
+    --background: #f6f1ea;
+    --foreground: #342c26;
+    --card: rgba(255, 252, 247, 0.92);
+    --card-foreground: #342c26;
+    --popover: #fffaf3;
+    --popover-foreground: #342c26;
+    --primary: #8f6f58;
+    --primary-foreground: #fffaf5;
+    --secondary: #efe6da;
+    --secondary-foreground: #5c4e43;
+    --muted: #f1e8dd;
+    --muted-foreground: #867464;
+    --accent: #ece1d4;
+    --accent-foreground: #473b31;
+    --border: rgba(150, 124, 102, 0.18);
+    --input: rgba(166, 142, 121, 0.26);
+    --ring: rgba(143, 111, 88, 0.35);
+    --sidebar: rgba(250, 244, 236, 0.88);
+    --sidebar-foreground: #5c4e43;
+    --sidebar-accent: #efe3d4;
+    --sidebar-accent-foreground: #473b31;
+    --sidebar-border: rgba(150, 124, 102, 0.14);
+    --radius: 1rem;
+    --shadow-sm: 0 10px 30px rgba(120, 98, 76, 0.08);
+    --shadow: 0 16px 40px rgba(120, 98, 76, 0.08);
+    --shadow-lg: 0 22px 60px rgba(120, 98, 76, 0.1);
+    --font-sans:
+      "Avenir Next", "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", ui-sans-serif, system-ui,
+      sans-serif;
+  }
+
+  :root[data-flomo-like="true"] body {
+    background:
+      radial-gradient(circle at top left, rgba(255, 255, 255, 0.72), transparent 34%),
+      radial-gradient(circle at top right, rgba(234, 219, 203, 0.38), transparent 26%),
+      linear-gradient(180deg, #f8f4ed 0%, #f4eee6 100%);
+    color: #342c26;
+  }
+
+  :root[data-flomo-like="true"] body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(132, 108, 89, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(132, 108, 89, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.4;
+    z-index: -1;
+  }
+
   * {
     @apply border-border outline-none ring-0;
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  :root[data-flomo-like="true"] #root {
+    min-height: 100vh;
+  }
+
+  :root[data-flomo-like="true"] ::selection {
+    background: rgba(143, 111, 88, 0.18);
+  }
+
+  :root[data-flomo-like="true"] .memo-editor {
+    border-radius: 24px;
+    border-color: #e8ddd1;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 16px 40px rgba(120, 98, 76, 0.08);
+  }
+
+  :root[data-flomo-like="true"] .memo-view-card {
+    border-color: #eadfce;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 14px 36px rgba(121, 98, 76, 0.06);
+  }
+
+  :root[data-flomo-like="true"] .tag-chip {
+    border-radius: 9999px;
+    border: 1px solid #eadfce;
+    background: #f8f1e9;
+    padding: 2px 10px;
+  }
+
+  :root[data-flomo-like="true"] .tag-chip-active {
+    border-color: #cfb092;
+    background: #efdfcf;
+    color: #5b4637;
   }
 
   /* ========================================

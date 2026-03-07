@@ -1,6 +1,8 @@
 import { create } from "@bufbuild/protobuf";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/contexts/AuthContext";
+import { useFlomoLike } from "@/hooks/useFlomoLike";
 import { useUpdateUserGeneralSetting } from "@/hooks/useUserQueries";
 import { Visibility } from "@/types/proto/api/v1/memo_service_pb";
 import { UserSetting_GeneralSetting, UserSetting_GeneralSettingSchema } from "@/types/proto/api/v1/user_service_pb";
@@ -18,6 +20,7 @@ import WebhookSection from "./WebhookSection";
 const PreferencesSection = () => {
   const t = useTranslate();
   const { currentUser, userGeneralSetting: generalSetting, refetchSettings } = useAuth();
+  const { flomoLike, setFlomoLike } = useFlomoLike();
   const { mutate: updateUserGeneralSetting } = useUpdateUserGeneralSetting(currentUser?.name);
 
   const handleLocaleSelectChange = async (locale: Locale) => {
@@ -99,6 +102,10 @@ const PreferencesSection = () => {
                 ))}
             </SelectContent>
           </Select>
+        </SettingRow>
+
+        <SettingRow label="Flomo-like UI">
+          <Switch checked={flomoLike} onCheckedChange={setFlomoLike} />
         </SettingRow>
       </SettingGroup>
 

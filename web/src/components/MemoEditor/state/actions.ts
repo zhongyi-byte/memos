@@ -57,6 +57,11 @@ export const editorActions = {
     type: "TOGGLE_FOCUS_MODE",
   }),
 
+  setFocusMode: (value: boolean): EditorAction => ({
+    type: "SET_FOCUS_MODE",
+    payload: value,
+  }),
+
   setLoading: (key: LoadingKey, value: boolean): EditorAction => ({
     type: "SET_LOADING",
     payload: { key, value },

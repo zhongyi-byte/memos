@@ -63,6 +63,10 @@ docker run -d \
 
 Open `http://localhost:5230` and start writing!
 
+### Optional: Flomo-like UI (frontend style toggle)
+
+In **Settings → Preferences**, enable **Flomo-like UI** to switch to a softer card/dashboard style (quick-capture emphasis, stats strip, 90-day heatmap).
+
 ### Try the Live Demo
 
 Don't want to install yet? Try our [live demo](https://demo.usememos.com/) first!

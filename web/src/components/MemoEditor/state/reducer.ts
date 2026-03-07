@@ -89,6 +89,15 @@ export function editorReducer(state: EditorState, action: EditorAction): EditorS
         },
       };
 
+    case "SET_FOCUS_MODE":
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          isFocusMode: action.payload,
+        },
+      };
+
     case "SET_LOADING":
       return {
         ...state,

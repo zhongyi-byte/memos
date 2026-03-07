@@ -28,6 +28,8 @@ interface Props {
   pageSize?: number;
   showCreator?: boolean;
   enabled?: boolean;
+  prefixElement?: JSX.Element;
+  memoEditorClassName?: string;
 }
 
 function useAutoFetchWhenNotScrollable({
@@ -160,8 +162,14 @@ const PagedMemoList = (props: Props) => {
             renderer={props.renderer}
             prefixElement={
               <>
+                {props.prefixElement}
                 {showMemoEditor ? (
-                  <MemoEditor className="mb-2" cacheKey="home-memo-editor" placeholder={t("editor.any-thoughts")} />
+                  <MemoEditor
+                    className={props.memoEditorClassName ?? "mb-2"}
+                    cacheKey="home-memo-editor"
+                    placeholder={t("editor.any-thoughts")}
+                    mobileSheet
+                  />
                 ) : undefined}
                 <MemoFilters />
               </>

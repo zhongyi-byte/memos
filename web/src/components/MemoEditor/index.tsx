@@ -1,8 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useMediaQuery from "@/hooks/useMediaQuery";
 import { memoKeys } from "@/hooks/useMemoQueries";
 import { userKeys } from "@/hooks/useUserQueries";
 import { handleError } from "@/lib/error";
@@ -30,6 +31,7 @@ const MemoEditorImpl: React.FC<MemoEditorProps> = ({
   parentMemoName,
   autoFocus,
   placeholder,
+  mobileSheet = false,
   onConfirm,
   onCancel,
 }) => {
@@ -39,6 +41,8 @@ const MemoEditorImpl: React.FC<MemoEditorProps> = ({
   const editorRef = useRef<EditorRefActions>(null);
   const { state, actions, dispatch } = useEditorContext();
   const { userGeneralSetting } = useAuth();
+  const md = useMediaQuery("md");
+  const isMobileSheetMode = mobileSheet && !md;
 
   const memoName = memo?.name;
 
@@ -57,7 +61,26 @@ const MemoEditorImpl: React.FC<MemoEditorProps> = ({
     dispatch(actions.toggleFocusMode());
   };
 
+  const handleEditorFocus = () => {
+    if (isMobileSheetMode && !state.ui.isFocusMode) {
+      dispatch(actions.setFocusMode(true));
+    }
+  };
+
   useKeyboard(editorRef, { onSave: handleSave });
+
+  useEffect(() => {
+    if (!state.ui.isFocusMode) {
+      return;
+    }
+
+    if (isMobileSheetMode) {
+      requestAnimationFrame(() => {
+        editorRef.current?.focus();
+        editorRef.current?.scrollToCursor();
+      });
+    }
+  }, [isMobileSheetMode, state.ui.isFocusMode]);
 
   async function handleSave() {
     // Validate before saving
@@ -121,24 +144,35 @@ const MemoEditorImpl: React.FC<MemoEditorProps> = ({
       */}
       <div
         className={cn(
-          "group relative w-full flex flex-col justify-between items-start bg-card px-4 pt-3 pb-1 rounded-lg border border-border gap-2",
+          "memo-editor group relative w-full flex flex-col justify-between items-start bg-card px-4 pt-3 pb-1 rounded-lg border border-border gap-2",
           FOCUS_MODE_STYLES.transition,
-          state.ui.isFocusMode && cn(FOCUS_MODE_STYLES.container.base, FOCUS_MODE_STYLES.container.spacing),
+          state.ui.isFocusMode && cn(isMobileSheetMode ? FOCUS_MODE_STYLES.container.mobileSheet : FOCUS_MODE_STYLES.container.desktop),
+          isMobileSheetMode &&
+            !state.ui.isFocusMode &&
+            "rounded-[24px] border-[#e6dacd] bg-[rgba(255,252,247,0.94)] px-4 py-3 shadow-[0_10px_30px_rgba(120,98,76,0.08)]",
+          isMobileSheetMode && state.ui.isFocusMode && "gap-3 px-5 pt-3 pb-[max(12px,env(safe-area-inset-bottom))]",
           className,
         )}
       >
+        {isMobileSheetMode && state.ui.isFocusMode && <div className="mx-auto h-1.5 w-12 rounded-full bg-white/16" />}
+
         {/* Exit button is absolutely positioned in top-right corner when active */}
         <FocusModeExitButton isActive={state.ui.isFocusMode} onToggle={handleToggleFocusMode} title={t("editor.exit-focus-mode")} />
 
         {memoName && <TimestampPopover />}
 
         {/* Editor content grows to fill available space in focus mode */}
-        <EditorContent ref={editorRef} placeholder={placeholder} autoFocus={autoFocus} />
+        <EditorContent ref={editorRef} placeholder={placeholder} autoFocus={autoFocus} onFocus={handleEditorFocus} />
 
         {/* Metadata and toolbar grouped together at bottom */}
-        <div className="w-full flex flex-col gap-2">
+        <div className={cn("flex w-full flex-col gap-2", isMobileSheetMode && state.ui.isFocusMode && "gap-3")}>
           <EditorMetadata memoName={memoName} />
-          <EditorToolbar onSave={handleSave} onCancel={onCancel} memoName={memoName} />
+          <EditorToolbar
+            onSave={handleSave}
+            onCancel={onCancel}
+            memoName={memoName}
+            mobileSheet={isMobileSheetMode && state.ui.isFocusMode}
+          />
         </div>
       </div>
     </>

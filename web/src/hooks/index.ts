@@ -2,6 +2,7 @@ export * from "./useAsyncEffect";
 export * from "./useCurrentUser";
 export * from "./useDateFilterNavigation";
 export * from "./useFilteredMemoStats";
+export * from "./useFlomoLike";
 export * from "./useLoading";
 export * from "./useMediaQuery";
 export * from "./useMemoFilters";

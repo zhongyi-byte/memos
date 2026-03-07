@@ -34,8 +34,8 @@ const MemoHeader: React.FC<MemoHeaderProps> = ({ showCreator, showVisibility, sh
   );
 
   return (
-    <div className="w-full flex flex-row justify-between items-center gap-2">
-      <div className="w-auto max-w-[calc(100%-8rem)] grow flex flex-row justify-start items-center">
+    <div className="flex w-full flex-row items-center justify-between gap-2">
+      <div className="flex w-auto max-w-[calc(100%-8rem)] grow flex-row items-center justify-start">
         {showCreator && creator ? (
           <CreatorDisplay creator={creator} displayTime={displayTime} onGotoDetail={onGotoDetail} />
         ) : (
@@ -43,7 +43,7 @@ const MemoHeader: React.FC<MemoHeaderProps> = ({ showCreator, showVisibility, sh
         )}
       </div>
 
-      <div className="flex flex-row justify-end items-center select-none shrink-0 gap-2">
+      <div className="flex shrink-0 select-none flex-row items-center justify-end gap-2 rounded-full bg-white/60 px-2 py-1">
         {currentUser && !isArchived && (
           <ReactionSelector
             className={cn("border-none w-auto h-auto", reactionSelectorOpen && "block!", "block sm:hidden sm:group-hover:block")}
@@ -105,13 +105,13 @@ interface CreatorDisplayProps {
 }
 
 const CreatorDisplay: React.FC<CreatorDisplayProps> = ({ creator, displayTime, onGotoDetail }) => (
-  <div className="w-full flex flex-row justify-start items-center">
-    <Link className="w-auto hover:opacity-80 rounded-md transition-colors" to={`/u/${encodeURIComponent(creator.username)}`} viewTransition>
-      <UserAvatar className="mr-2 shrink-0" avatarUrl={creator.avatarUrl} />
+  <div className="flex w-full flex-row items-center justify-start">
+    <Link className="w-auto rounded-full transition-colors hover:opacity-80" to={`/u/${encodeURIComponent(creator.username)}`} viewTransition>
+      <UserAvatar className="mr-3 shrink-0" avatarUrl={creator.avatarUrl} />
     </Link>
-    <div className="w-full flex flex-col justify-center items-start">
+    <div className="flex w-full flex-col items-start justify-center">
       <Link
-        className="block leading-tight hover:opacity-80 rounded-md transition-colors truncate text-muted-foreground"
+        className="block truncate rounded-md text-sm font-medium leading-tight text-[#4d4035] transition-colors hover:opacity-80"
         to={`/u/${encodeURIComponent(creator.username)}`}
         viewTransition
       >
@@ -119,7 +119,7 @@ const CreatorDisplay: React.FC<CreatorDisplayProps> = ({ creator, displayTime, o
       </Link>
       <button
         type="button"
-        className="w-auto -mt-0.5 text-xs leading-tight text-muted-foreground select-none cursor-pointer hover:opacity-80 transition-colors text-left"
+        className="mt-0.5 w-auto cursor-pointer select-none text-left text-xs leading-tight text-[#9b8979] transition-colors hover:opacity-80"
         onClick={onGotoDetail}
       >
         {displayTime}
@@ -136,7 +136,7 @@ interface TimeDisplayProps {
 const TimeDisplay: React.FC<TimeDisplayProps> = ({ displayTime, onGotoDetail }) => (
   <button
     type="button"
-    className="w-full text-sm leading-tight text-muted-foreground select-none cursor-pointer hover:text-foreground transition-colors text-left"
+    className="w-full cursor-pointer select-none text-left text-sm font-medium leading-tight text-[#8d7867] transition-colors hover:text-foreground"
     onClick={onGotoDetail}
   >
     {displayTime}

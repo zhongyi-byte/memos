@@ -42,6 +42,7 @@ export type EditorAction =
   | { type: "REMOVE_LOCAL_FILE"; payload: string }
   | { type: "CLEAR_LOCAL_FILES" }
   | { type: "TOGGLE_FOCUS_MODE" }
+  | { type: "SET_FOCUS_MODE"; payload: boolean }
   | { type: "SET_LOADING"; payload: { key: LoadingKey; value: boolean } }
   | { type: "SET_DRAGGING"; payload: boolean }
   | { type: "SET_COMPOSING"; payload: boolean }

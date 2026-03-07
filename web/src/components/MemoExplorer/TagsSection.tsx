@@ -37,9 +37,9 @@ const TagsSection = (props: Props) => {
   };
 
   return (
-    <div className="w-full flex flex-col justify-start items-start mt-3 px-1 h-auto shrink-0 flex-nowrap">
-      <div className="flex flex-row justify-between items-center w-full gap-1 mb-1 text-sm leading-6 text-muted-foreground select-none">
-        <span>{t("common.tags")}</span>
+    <div className="mt-4 flex h-auto w-full shrink-0 flex-col items-start rounded-[24px] border border-[rgba(150,124,102,0.12)] bg-white/55 px-3 py-3 backdrop-blur">
+      <div className="mb-2 flex w-full select-none flex-row items-center justify-between gap-1 text-sm leading-6 text-muted-foreground">
+        <span className="font-medium text-[#7b6958]">{t("common.tags")}</span>
         {tags.length > 0 && (
           <Popover>
             <PopoverTrigger>
@@ -62,16 +62,17 @@ const TagsSection = (props: Props) => {
         treeMode ? (
           <TagTree tagAmounts={tags} expandSubTags={!!treeAutoExpand} />
         ) : (
-          <div className="w-full flex flex-row justify-start items-center relative flex-wrap gap-x-2 gap-y-1.5">
+          <div className="relative flex w-full flex-row items-center justify-start gap-x-2 gap-y-2 flex-wrap">
             {tags.map(([tag, amount]) => {
               const isActive = getFiltersByFactor("tagSearch").some((filter: MemoFilter) => filter.value === tag);
               return (
                 <div
                   key={tag}
                   className={cn(
-                    "shrink-0 w-auto max-w-full text-sm rounded-md leading-6 flex flex-row justify-start items-center select-none cursor-pointer transition-colors",
-                    "hover:opacity-80",
-                    isActive ? "text-primary" : "text-muted-foreground",
+                    "flex w-auto max-w-full shrink-0 cursor-pointer flex-row items-center justify-start rounded-full border px-2.5 py-1 text-sm leading-6 transition-colors",
+                    isActive
+                      ? "border-[rgba(143,111,88,0.18)] bg-[#f0e3d4] text-primary"
+                      : "border-[rgba(150,124,102,0.12)] bg-[#fbf7f2] text-muted-foreground hover:bg-[#f5ede4]",
                   )}
                   onClick={() => handleTagClick(tag)}
                 >

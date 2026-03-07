@@ -6,7 +6,7 @@ import { useTranslate } from "@/utils/i18n";
 import type { VisibilitySelectorProps } from "../types";
 
 const VisibilitySelector = (props: VisibilitySelectorProps) => {
-  const { value, onChange } = props;
+  const { value, onChange, compact = false } = props;
   const t = useTranslate();
 
   const visibilityOptions = [
@@ -20,10 +20,16 @@ const VisibilitySelector = (props: VisibilitySelectorProps) => {
   return (
     <DropdownMenu onOpenChange={props.onOpenChange}>
       <DropdownMenuTrigger asChild>
-        <button className="inline-flex items-center px-2 text-sm text-muted-foreground opacity-80 hover:opacity-100 transition-colors">
-          <VisibilityIcon visibility={value} className="opacity-60 mr-1.5" />
-          <span>{currentLabel}</span>
-          <ChevronDownIcon className="ml-0.5 w-4 h-4 opacity-60" />
+        <button
+          className={
+            compact
+              ? "inline-flex h-9 items-center gap-1.5 rounded-full border border-white/10 bg-white/8 px-3 text-sm text-white/80 transition-colors hover:bg-white/12 hover:text-white"
+              : "inline-flex items-center px-2 text-sm text-muted-foreground opacity-80 transition-colors hover:opacity-100"
+          }
+        >
+          <VisibilityIcon visibility={value} className={compact ? "opacity-80" : "opacity-60 mr-1.5"} />
+          {!compact && <span>{currentLabel}</span>}
+          <ChevronDownIcon className="ml-0.5 h-4 w-4 opacity-60" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

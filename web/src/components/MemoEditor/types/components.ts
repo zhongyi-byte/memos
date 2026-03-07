@@ -8,6 +8,7 @@ export interface MemoEditorProps {
   className?: string;
   cacheKey?: string;
   placeholder?: string;
+  mobileSheet?: boolean;
   /** Existing memo to edit. When provided, the editor initializes from it without fetching. */
   memo?: Memo;
   parentMemoName?: string;
@@ -19,12 +20,14 @@ export interface MemoEditorProps {
 export interface EditorContentProps {
   placeholder?: string;
   autoFocus?: boolean;
+  onFocus?: () => void;
 }
 
 export interface EditorToolbarProps {
   onSave: () => void;
   onCancel?: () => void;
   memoName?: string;
+  mobileSheet?: boolean;
 }
 
 export interface EditorMetadataProps {
@@ -89,6 +92,7 @@ export interface EditorProps {
   placeholder: string;
   onContentChange: (content: string) => void;
   onPaste: (event: React.ClipboardEvent) => void;
+  onFocus?: () => void;
   isFocusMode?: boolean;
   isInIME?: boolean;
   onCompositionStart?: () => void;
@@ -99,4 +103,5 @@ export interface VisibilitySelectorProps {
   value: Visibility;
   onChange: (visibility: Visibility) => void;
   onOpenChange?: (open: boolean) => void;
+  compact?: boolean;
 }

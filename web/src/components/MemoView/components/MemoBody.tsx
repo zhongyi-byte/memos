@@ -30,7 +30,7 @@ const MemoBody: React.FC<MemoBodyProps> = ({ compact, onContentClick, onContentD
     <>
       <div
         className={cn(
-          "w-full flex flex-col justify-start items-start gap-2",
+          "flex w-full flex-col items-start justify-start gap-3 text-[15px] leading-7",
           nsfw && !showNSFWContent && "blur-lg transition-all duration-200",
         )}
       >

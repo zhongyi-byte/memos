@@ -15,6 +15,7 @@ import { ViewProvider } from "@/contexts/ViewContext";
 import { useTokenRefreshOnFocus } from "@/hooks/useTokenRefreshOnFocus";
 import { queryClient } from "@/lib/query-client";
 import router from "./router";
+import { applyFlomoLikeEarly } from "./utils/flomo-like";
 import { applyLocaleEarly } from "./utils/i18n";
 import { applyThemeEarly } from "./utils/theme";
 import "leaflet/dist/leaflet.css";
@@ -23,6 +24,7 @@ import "katex/dist/katex.min.css";
 // Apply theme and locale early to prevent flash
 applyThemeEarly();
 applyLocaleEarly();
+applyFlomoLikeEarly();
 
 // Inner component that initializes contexts
 function AppInitializer({ children }: { children: React.ReactNode }) {
