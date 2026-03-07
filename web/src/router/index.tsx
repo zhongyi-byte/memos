@@ -25,44 +25,49 @@ import { ROUTES } from "./routes";
 export const Routes = ROUTES;
 export { ROUTES };
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <App />,
+      children: [
+        {
+          path: Routes.AUTH,
+          children: [
+            { path: "", element: <SignIn /> },
+            { path: "admin", element: <AdminSignIn /> },
+            { path: "signup", element: <SignUp /> },
+            { path: "callback", element: <AuthCallback /> },
+          ],
+        },
+        {
+          path: Routes.ROOT,
+          element: <RootLayout />,
+          children: [
+            {
+              element: <MainLayout />,
+              children: [
+                { path: "", element: <Home /> },
+                { path: Routes.EXPLORE, element: <Explore /> },
+                { path: Routes.ARCHIVED, element: <Archived /> },
+                { path: "u/:username", element: <UserProfile /> },
+              ],
+            },
+            { path: Routes.ATTACHMENTS, element: <Attachments /> },
+            { path: Routes.INBOX, element: <Inboxes /> },
+            { path: Routes.SETTING, element: <Setting /> },
+            { path: "memos/:uid", element: <MemoDetail /> },
+            { path: "403", element: <PermissionDenied /> },
+            { path: "404", element: <NotFound /> },
+            { path: "*", element: <NotFound /> },
+          ],
+        },
+      ],
+    },
+  ],
   {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: Routes.AUTH,
-        children: [
-          { path: "", element: <SignIn /> },
-          { path: "admin", element: <AdminSignIn /> },
-          { path: "signup", element: <SignUp /> },
-          { path: "callback", element: <AuthCallback /> },
-        ],
-      },
-      {
-        path: Routes.ROOT,
-        element: <RootLayout />,
-        children: [
-          {
-            element: <MainLayout />,
-            children: [
-              { path: "", element: <Home /> },
-              { path: Routes.EXPLORE, element: <Explore /> },
-              { path: Routes.ARCHIVED, element: <Archived /> },
-              { path: "u/:username", element: <UserProfile /> },
-            ],
-          },
-          { path: Routes.ATTACHMENTS, element: <Attachments /> },
-          { path: Routes.INBOX, element: <Inboxes /> },
-          { path: Routes.SETTING, element: <Setting /> },
-          { path: "memos/:uid", element: <MemoDetail /> },
-          { path: "403", element: <PermissionDenied /> },
-          { path: "404", element: <NotFound /> },
-          { path: "*", element: <NotFound /> },
-        ],
-      },
-    ],
+    basename: import.meta.env.BASE_URL,
   },
-]);
+);
 
 export default router;

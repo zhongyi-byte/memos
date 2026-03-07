@@ -1,5 +1,6 @@
 import { clearAccessToken } from "@/auth-state";
 import { ROUTES } from "@/router/routes";
+import { usesConfiguredServerMode } from "./server-config";
 
 const PUBLIC_ROUTES = [
   ROUTES.AUTH, // Authentication pages
@@ -30,6 +31,6 @@ export function redirectOnAuthFailure(): void {
   // and they should re-authenticate rather than being sent to explore.
   if (isPrivateRoute(currentPath)) {
     clearAccessToken();
-    window.location.replace(ROUTES.AUTH);
+    window.location.replace(usesConfiguredServerMode() ? ROUTES.ROOT : ROUTES.AUTH);
   }
 }

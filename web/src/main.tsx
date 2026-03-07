@@ -8,6 +8,7 @@ import { RouterProvider } from "react-router-dom";
 import NativeServerSetup from "@/components/NativeServerSetup";
 import "./i18n";
 import "./index.css";
+import { registerSW } from "virtual:pwa-register";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { refreshAccessToken } from "@/connect";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
@@ -27,6 +28,7 @@ import "katex/dist/katex.min.css";
 applyThemeEarly();
 applyLocaleEarly();
 applyFlomoLikeEarly();
+registerSW({ immediate: true });
 
 // Inner component that initializes contexts
 function AppInitializer({ children }: { children: React.ReactNode }) {

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { setAccessToken } from "@/auth-state";
 import { Button } from "@/components/ui/button";
-import { getConfiguredServerUrl, setConfiguredServerUrl } from "@/utils/server-config";
+import { isNativeApp } from "@/utils/native-app";
+import { getConfiguredServerUrl, setConfiguredServerUrl, usesConfiguredServerMode } from "@/utils/server-config";
 
 const PERMANENT_TOKEN_EXPIRY = new Date("2099-12-31T23:59:59.000Z");
 
 const NativeServerSetup = () => {
+  const isWebPwaSetup = usesConfiguredServerMode() && !isNativeApp();
   const [serverUrl, setServerUrl] = useState(() => getConfiguredServerUrl() ?? "");
   const [token, setToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -39,13 +41,11 @@ const NativeServerSetup = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[linear-gradient(180deg,#f5efe7_0%,#efe7dd_100%)] px-5 py-8 text-[#2e2924]">
       <div className="w-full max-w-sm rounded-[28px] border border-[#e0d5c8] bg-white/90 p-6 shadow-[0_24px_80px_rgba(85,66,48,0.12)] backdrop-blur">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#a28b76]">Android Setup</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#a28b76]">{isWebPwaSetup ? "PWA Setup" : "App Setup"}</p>
         <h1 className="mt-3 text-2xl font-semibold tracking-tight">Connect to your Memos server</h1>
-        <p className="mt-2 text-sm leading-6 text-[#7c6859]">
-          Enter the server address and a personal access token to use this app on Android.
-        </p>
+        <p className="mt-2 text-sm leading-6 text-[#7c6859]">Enter the server address and a personal access token to use this app.</p>
         <p className="mt-2 text-xs leading-5 text-[#8b7767]">
-          `http://` and `https://` are both supported. Self-signed HTTPS certificates may still be rejected by Android.
+          `http://` and `https://` are both supported. Self-signed HTTPS certificates may still be rejected by some devices and browsers.
         </p>
 
         <div className="mt-6 space-y-4">

@@ -2,8 +2,11 @@ import { getAccessToken } from "@/auth-state";
 import { isNativeApp } from "./native-app";
 
 const SERVER_URL_KEY = "memos-native-server-url";
+const FORCE_SERVER_SETUP = import.meta.env.VITE_FORCE_SERVER_SETUP === "true";
 
 const normalizeServerUrl = (value: string): string => value.trim().replace(/\/+$/, "");
+
+export const usesConfiguredServerMode = (): boolean => isNativeApp() || FORCE_SERVER_SETUP;
 
 export const getConfiguredServerUrl = (): string | null => {
   if (typeof window === "undefined") {
@@ -39,7 +42,7 @@ export const getApiBaseUrl = (): string => {
     return "";
   }
 
-  if (isNativeApp()) {
+  if (usesConfiguredServerMode()) {
     return getConfiguredServerUrl() ?? window.location.origin;
   }
 
@@ -47,7 +50,7 @@ export const getApiBaseUrl = (): string => {
 };
 
 export const needsNativeServerSetup = (): boolean => {
-  if (!isNativeApp()) {
+  if (!usesConfiguredServerMode()) {
     return false;
   }
 
