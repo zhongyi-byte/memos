@@ -8,6 +8,7 @@ const PERMANENT_TOKEN_EXPIRY = new Date("2099-12-31T23:59:59.000Z");
 
 const NativeServerSetup = () => {
   const isWebPwaSetup = usesConfiguredServerMode() && !isNativeApp();
+  const isSecureHostPage = typeof window !== "undefined" && window.location.protocol === "https:";
   const [serverUrl, setServerUrl] = useState(() => getConfiguredServerUrl() ?? "");
   const [token, setToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -25,6 +26,11 @@ const NativeServerSetup = () => {
       const parsedUrl = new URL(normalizedUrl);
       if (!["http:", "https:"].includes(parsedUrl.protocol)) {
         setErrorMessage("The server URL must start with http:// or https://.");
+        return;
+      }
+
+      if (isSecureHostPage && parsedUrl.protocol === "http:") {
+        setErrorMessage("This hosted PWA is opened over HTTPS, so browsers will block an HTTP Memos server. Use an HTTPS server URL instead.");
         return;
       }
     } catch {
@@ -45,7 +51,9 @@ const NativeServerSetup = () => {
         <h1 className="mt-3 text-2xl font-semibold tracking-tight">Connect to your Memos server</h1>
         <p className="mt-2 text-sm leading-6 text-[#7c6859]">Enter the server address and a personal access token to use this app.</p>
         <p className="mt-2 text-xs leading-5 text-[#8b7767]">
-          `http://` and `https://` are both supported. Self-signed HTTPS certificates may still be rejected by some devices and browsers.
+          {isSecureHostPage
+            ? "Because this PWA is hosted over HTTPS, the server URL must also use HTTPS. Plain HTTP addresses such as Tailscale IPs on port 5230 will be blocked by the browser."
+            : "`http://` and `https://` are both supported. Self-signed HTTPS certificates may still be rejected by some devices and browsers."}
         </p>
 
         <div className="mt-6 space-y-4">
